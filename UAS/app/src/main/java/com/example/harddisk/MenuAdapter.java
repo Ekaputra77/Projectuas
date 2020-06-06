@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,13 +12,23 @@ import androidx.annotation.NonNull;
 import  androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.restaurant.R;
+import com.example.harddisk.R;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MenuAdapter extends  RecyclerView.Adapter<MenuAdapter.MenuViewHolder> {
     private Context context;
     private ArrayList<Menu> menus;
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onItemClick (int position);
+    }
+
+    public void setOnClickListener (OnItemClickListener listener){
+        mListener = listener;
+    }
 
     public MenuAdapter(Context mcontext, ArrayList<Menu> menuhardsik){
         context = mcontext;
@@ -28,7 +39,6 @@ public class MenuAdapter extends  RecyclerView.Adapter<MenuAdapter.MenuViewHolde
     @Override
     public MenuViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.item_menu,parent,false);
-
         return new MenuViewHolder(v);
     }
 
@@ -59,12 +69,23 @@ public class MenuAdapter extends  RecyclerView.Adapter<MenuAdapter.MenuViewHolde
         public TextView tvhargadata;
         public TextView tvnamadata;
 
-        public MenuViewHolder(@NonNull View itemView) {
-            super(itemView);
-            imdata = itemView.findViewById(R.id.img_menu);
-            tvhargadata = itemView.findViewById(R.id.tv_harga);
-            tvnamadata = itemView.findViewById(R.id.tv_nama);
+        MenuViewHolder(@NonNull View view) {
+            super(view);
+            imdata = view.findViewById(R.id.img_menu);
+            tvhargadata = view.findViewById(R.id.tv_harga);
+            tvnamadata = view.findViewById(R.id.tv_nama);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            mListener.onItemClick(position);
+                        }
+                    }
+                }
+                });
+            }
         }
-    }
 }

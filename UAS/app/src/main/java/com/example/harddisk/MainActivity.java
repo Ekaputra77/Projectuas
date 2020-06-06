@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.android.volley.Request;
@@ -12,7 +13,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.restaurant.R;
+import com.example.harddisk.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,7 +21,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MenuAdapter.OnItemClickListener {
+    public static final String Extra_Nama = "nama";
+    public static final String Extra_Gambar = "image";
+
     private MenuAdapter menuAdapter;
     private RecyclerView recyclerView;
     private ArrayList<Menu> menus;
@@ -56,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             menuAdapter = new MenuAdapter(MainActivity.this, menus);
                             recyclerView.setAdapter(menuAdapter);
+                            menuAdapter.setOnClickListener(MainActivity.this);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -67,5 +72,16 @@ public class MainActivity extends AppCompatActivity {
             }
     });
         requestQueue.add(request);
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent pindah = new Intent (MainActivity.this, DetailActivity.class);
+        Menu clickedItem = menus.get(position);
+
+        pindah.putExtra(Extra_Gambar, clickedItem.getGambar());
+        pindah.putExtra(Extra_Nama, clickedItem.getNama());
+
+        startActivity(pindah);
     }
 }

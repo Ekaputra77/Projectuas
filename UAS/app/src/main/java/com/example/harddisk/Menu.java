@@ -5,10 +5,10 @@ public class Menu {
     private String harga;
     private String gambar;
 
-    public Menu(String datanama, String dataharga, String datagambar){
-        nama = datanama;
-        harga = dataharga;
-        gambar = datagambar;
+    public Menu(String nama, String harga,String gambar) {
+        this.nama = nama;
+        this.harga = harga;
+        this.gambar = gambar;
     }
 
     public String getNama() {
